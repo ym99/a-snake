@@ -26,14 +26,25 @@
             }
 
             #main td.snake-head {
-                border: solid 1px #777777;
-                background-color: #777777;
+                border: solid 1px #007700;
+                background-color: #007700;
             }
 
             #main td.snake-body {
-                border: solid 1px #aaaaaa;
-                background-color: #aaaaaa;
+                border: solid 1px #00aa00;
+                background-color: #00aa00;
             }
+
+            #main td.snake-head.crash {
+                border: solid 1px #770000;
+                background-color: #770000;
+            }
+
+            #main td.snake-body.crash {
+                border: solid 1px #aa0000;
+                background-color: #aa0000;
+            }
+            
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', function(){
@@ -65,17 +76,23 @@
                         width: () => table.rows[0].cells.length,
                         height: () => table.rows.length,
 
-                        drawSnake: (snake, keepTailTip = true) => {
+                        drawSnake: (snake, {clearLast, crash}) => {
                             for(let i = 0; i < snake.length; i++) {
                                 const classList = table.rows[snake[i].y].cells[snake[i].x].classList;
                                 if (i === 0) {
-                                    classList.remove('snake-body');
+                                    classList.remove('snake-body', 'crash');
                                     classList.add('snake-head');
-                                } else if (i < snake.length - 1 || keepTailTip) {
-                                    classList.remove('snake-head');
+                                    if (crash) { 
+                                        classList.add('crash'); 
+                                    }
+                                } else if (i < snake.length - 1 || !clearLast) {
+                                    classList.remove('snake-head', 'crash');
                                     classList.add('snake-body');
+                                    if (crash) { 
+                                        classList.add('crash'); 
+                                    }
                                 } else {
-                                    classList.remove('snake-body', 'snake-head');
+                                    classList.remove('snake-body', 'snake-head', 'crash');
                                 }
                             }
                         }
@@ -96,15 +113,44 @@
                     }
                 }
 
+                const delta = {
+                    deltaX: 0,
+                    deltaY: 0,
+                };
+
+                window.onkeydown = (e) => {
+                    switch ((e || window.event).keyCode)  {
+                        case 38: // up
+                            delta.deltaX = 0;
+                            delta.deltaY = -1;
+                            break;
+
+                        case 40: // down
+                            delta.deltaX = 0;
+                            delta.deltaY = 1;
+                            break;
+
+                        case 37: // left
+                            delta.deltaX = -1;
+                            delta.deltaY = 0;
+                            break;
+
+                        case 39: // right
+                            delta.deltaX = 1;
+                            delta.deltaY = 0;
+                            break;
+                    }
+                };
+
                 const snake = ((size) => {
-                    const result = [createRandomPoint()];
+                    const snake = [createRandomPoint()];
                     const preferX = Math.random() >= 0.5;
                     const delta = {
                         deltaX:  preferX ? Math.random() >= 0.5 ? 1 : -1 : 0,
                         deltaY: !preferX ? Math.random() >= 0.5 ? 1 : -1 : 0,
                     };
                     for(let i = 1; i < size; i++) {
-                        const last = result[result.length - 1];
+                        const last = snake[snake.length - 1];
                         if (last.x + delta.deltaX < 0 || last.x + delta.deltaX >= board.width()) {
                             delta.deltaX = 0;
                             delta.deltaY = 
@@ -121,24 +167,40 @@
                             delta.deltaY = 0;
                         }
 
-                        result.push(createPoint(last, delta));
+                        snake.push(createPoint(last, delta));
                     }
 
-                    return result;
+                    board.drawSnake(snake, { clearLast: false });
+                    return snake;
                 })(3);
 
-                board.drawSnake(snake);
+                function onTimer() {
+                    if (delta.deltaX === 0 && delta.deltaY ===0) {
+                        window.setTimeout(onTimer, 1000);
+                        return;
+                    }
 
-                const delta = {
-                    deltaX: 1,
-                    deltaY: 0,
-                };
+                    const newHead = createPoint(snake[0], delta);
+                    if (newHead.x < 0 || 
+                        newHead.x >= board.width() ||
+                        newHead.y < 0 ||
+                        newHead.y >= board.height()
+                        )
+                    {
+                        console.info('crash');
+                        board.drawSnake(snake, { crash: true });
+                        // don't continue timer
+                        return;
+                    }
 
-                window.setInterval(() => {
-                    snake.unshift(createPoint(snake[0], delta));
-                    board.drawSnake(snake, false);
+                    snake.unshift(newHead);
+                    board.drawSnake(snake, { clearLast: true });
                     snake.pop();
-                }, 1000);
+
+                    window.setTimeout(onTimer, 1000);
+                }
+
+                window.setTimeout(onTimer, 1000);
 
             }, false);
         </script>
