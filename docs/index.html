@@ -37,7 +37,7 @@
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', function(){
-                function createBoard() { 
+                const board = (() => { 
                     const table = document.getElementById("main");
 
                     // cleaning
@@ -61,22 +61,26 @@
                         }
                     }
 
-                    function clearedCellClassList({x, y}) {
-                        const classList = table.rows[y].cells[x].classList;
-                        classList.remove('snake-head', 'snake-body');
-
-                        return classList;
-                    }
-
                     return {
                         width: () => table.rows[0].cells.length,
                         height: () => table.rows.length,
 
-                        setSnake: ({x, y}, head) => clearedCellClassList({x, y}).add(head ? 'snake-head' : 'snake-body'),
+                        drawSnake: (snake, keepTailTip = true) => {
+                            for(let i = 0; i < snake.length; i++) {
+                                const classList = table.rows[snake[i].y].cells[snake[i].x].classList;
+                                if (i === 0) {
+                                    classList.remove('snake-body');
+                                    classList.add('snake-head');
+                                } else if (i < snake.length - 1 || keepTailTip) {
+                                    classList.remove('snake-head');
+                                    classList.add('snake-body');
+                                } else {
+                                    classList.remove('snake-body', 'snake-head');
+                                }
+                            }
+                        }
                     };
-                }
-
-                const board = createBoard();
+                })();
 
                 function createRandomPoint() {
                     return {
@@ -85,10 +89,56 @@
                     };
                 }
 
-                const snake = [createRandomPoint()];
-                for(let i = 0; i < snake.length; i++) {
-                    board.setSnake(snake[i], i === 0);
+                function createPoint({x, y}, {deltaX, deltaY}) {
+                    return {
+                        x: x + deltaX,
+                        y: y + deltaY,
+                    }
                 }
+
+                const snake = ((size) => {
+                    const result = [createRandomPoint()];
+                    const preferX = Math.random() >= 0.5;
+                    const delta = {
+                        deltaX:  preferX ? Math.random() >= 0.5 ? 1 : -1 : 0,
+                        deltaY: !preferX ? Math.random() >= 0.5 ? 1 : -1 : 0,
+                    };
+                    for(let i = 1; i < size; i++) {
+                        const last = result[result.length - 1];
+                        if (last.x + delta.deltaX < 0 || last.x + delta.deltaX >= board.width()) {
+                            delta.deltaX = 0;
+                            delta.deltaY = 
+                                last.y === 0 ? 1 : 
+                                last.y === board.height() - 1 ? -1 :
+                                    Math.random() >= 0.5 ? 1 : -1;
+                        }
+
+                        if (last.y + delta.deltaY < 0 || last.y + delta.deltaY >= board.height()) {
+                            delta.deltaX = 
+                                last.x === 0 ? 1 : 
+                                last.x === board.width() - 1 ? -1 :
+                                    Math.random() >= 0.5 ? 1 : -1;
+                            delta.deltaY = 0;
+                        }
+
+                        result.push(createPoint(last, delta));
+                    }
+
+                    return result;
+                })(3);
+
+                board.drawSnake(snake);
+
+                const delta = {
+                    deltaX: 1,
+                    deltaY: 0,
+                };
+
+                window.setInterval(() => {
+                    snake.unshift(createPoint(snake[0], delta));
+                    board.drawSnake(snake, false);
+                    snake.pop();
+                }, 1000);
 
             }, false);
         </script>
