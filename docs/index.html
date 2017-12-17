@@ -21,42 +21,75 @@
             #main td {
                 width: 10px;
                 height: 10px;
+                border: solid 1px #ffffff;
+                border-radius: 5px;
             }
 
             #main td.snake-head {
-                border: solid 1px black;
-                border-radius: 5px;
+                border: solid 1px #777777;
+                background-color: #777777;
             }
 
             #main td.snake-body {
-                border: solid 1px blue;
-                border-radius: 5px;
+                border: solid 1px #aaaaaa;
+                background-color: #aaaaaa;
             }
         </style>
         <script>
-            document.addEventListener('DOMContentLoaded', function(){ 
-                const table = document.getElementById("main");
-                
-                // cleaning
-                while (table.rows.length > 0) {
-                    table.deleteRow(-1);
-                }
+            document.addEventListener('DOMContentLoaded', function(){
+                function createBoard() { 
+                    const table = document.getElementById("main");
 
-                const size = 10;
-
-                const xCount = Math.floor(window.innerWidth / (size + 1));
-                const yCount = Math.floor(window.innerHeight / (size + 1));
-
-                for(let y = 0; y < yCount; y++)
-                {
-                    const row = table.insertRow(y);
-
-                    for(let x = 0; x < xCount; x++)
-                    {
-                        const cell = row.insertCell(x);
-                        cell.classList.add("snake-body");
+                    // cleaning
+                    while (table.rows.length > 0) {
+                        table.deleteRow(-1);
                     }
+
+                    // initalizing the table
+                    const cellSize = 10;
+
+                    const xCount = Math.floor(window.innerWidth / (cellSize + 1));
+                    const yCount = Math.floor(window.innerHeight / (cellSize + 1));
+
+                    for(let y = 0; y < yCount; y++)
+                    {
+                        const row = table.insertRow(y);
+
+                        for(let x = 0; x < xCount; x++)
+                        {
+                            const cell = row.insertCell(x);
+                        }
+                    }
+
+                    function clearedCellClassList({x, y}) {
+                        const classList = table.rows[y].cells[x].classList;
+                        classList.remove('snake-head', 'snake-body');
+
+                        return classList;
+                    }
+
+                    return {
+                        width: () => table.rows[0].cells.length,
+                        height: () => table.rows.length,
+
+                        setSnake: ({x, y}, head) => clearedCellClassList({x, y}).add(head ? 'snake-head' : 'snake-body'),
+                    };
                 }
+
+                const board = createBoard();
+
+                function createRandomPoint() {
+                    return {
+                        x: Math.floor(Math.random() * board.width()),
+                        y: Math.floor(Math.random() * board.height())
+                    };
+                }
+
+                const snake = [createRandomPoint()];
+                for(let i = 0; i < snake.length; i++) {
+                    board.setSnake(snake[i], i === 0);
+                }
+
             }, false);
         </script>
     </head>
