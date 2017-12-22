@@ -33,15 +33,20 @@
         #main td.snake-body{
             border: solid 1px #015e01;
         }     
+        #up, #down, #left, #right {
+            position: absolute;
+            border: solid 1px red;
+        }
 
         </style>
 
         <script>
             document.addEventListener("DOMContentLoaded", function(event) {
+                var table = document.getElementById("main");
+
                 var maxCells = Math.floor((window.innerWidth - 2) / 10);
                 var maxRows = Math.floor((window.innerHeight - 2) / 10);
                 
-                var table = document.getElementById("main");
                 var r = 0;
                 while(r < maxRows) {
                     var row = table.insertRow(table.rows.length-1);
@@ -54,6 +59,33 @@
                     r = r + 1;  
                 }
 
+                var up = document.getElementById("up");
+                up.style.left = window.innerWidth/4;
+                up.style.top = 0;
+                up.style.width = window.innerWidth/2;
+                up.style.height = window.innerHeight/4; 
+
+                var down = document.getElementById("down");
+                down.style.left = window.innerWidth/4;
+                down.style.top = window.innerHeight*3/4 ;
+                down.style.width = window.innerWidth/2;
+                down.style.height = window.innerHeight/4;
+                
+                var left = document.getElementById("left");
+                left.style.left = 0;
+                left.style.top = window.innerHeight/4 ;
+                left.style.width = window.innerWidth/4;
+                left.style.height = window.innerHeight/2;
+
+                var right = document.getElementById("right");
+                right.style.left = window.innerWidth*3/4;
+                right.style.top = window.innerHeight/4 ;
+                right.style.width = window.innerWidth/4;
+                right.style.height = window.innerHeight/2; 
+ 
+
+
+                
                 var snake = [];
                 snake.push({
                     x: 10, 
@@ -107,9 +139,31 @@
                    y:0,
                }
 
-               document.addEventListener("keydown", (e) => {
-                    e = e || window.event;
-
+               document.getElementById("up").addEventListener("click", () => {
+                    delta = {
+                        x:0,
+                        y:-1
+                    };
+               });
+               document.getElementById("down").addEventListener("click", () => {
+                    delta = {
+                        x:0,
+                        y:1
+                    };
+               });
+               document.getElementById("left").addEventListener("click", () => {
+                    delta = {
+                        x:-1,
+                        y:0
+                    };
+               });
+               document.getElementById("right").addEventListener("click", () => {
+                    delta = {
+                        x:1,
+                        y:0
+                    };
+               });
+/*
                     if (e.keyCode === 38) { // up
                         delta = {
                             x:0,
@@ -137,7 +191,7 @@
                             y:0
                         };
                     }
-               });
+                    */
 
                 window.setInterval(() => {
                     hideSnake();
@@ -153,10 +207,13 @@
             });
         </script>
     </head>
-    <body   >
+    <body>
             
         <table id="main"></table>
-        
+        <div id = "up"></div>
+        <div id = "down"></div> 
+        <div id = "left"></div>
+        <div id = "right"></div>
         
     </body>
 
