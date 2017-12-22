@@ -13,7 +13,6 @@
             margin: 0;
         }
         #main{
-            border: solid 1px black;
             border-spacing: 0; 
             border-collapse: separate;
             
@@ -29,8 +28,12 @@
         }
 
         #main td.snake-head{
-            border: solid 1px green;
+            border: solid 1px #02a302;
              }
+        #main td.snake-body{
+            border: solid 1px #015e01;
+        }     
+
         </style>
 
         <script>
@@ -56,27 +59,101 @@
                     x: 10, 
                     y: 10
                 });
-                snake.push({
+                /*snake.push({
                     x: 9,
                     y: 10
                 });
                 snake.push({
                     x: 8,
                     y: 10
-                });
+                });*/
                 function showSnake(){
                     var snakeHead = snake[0];
                     var table = document.getElementById("main");
                     var row = table.rows[ snakeHead.y ];
                     var cell = row.cells[ snakeHead.x ];
                     cell.classList.add("snake-head");
+                     
+                    var i = 1;
+                    while (i<snake.length){
+                        var snakeBody = snake[i];
+                        var row = table.rows[ snakeBody.y ];
+                        var cell = row.cells[ snakeBody.x ];
+                        cell.classList.add("snake-body");
+                        i = i + 1;
+                    }    
                 }
+                function hideSnake(){
+                    var snakeHead = snake[0];
+                    var table = document.getElementById("main");
+                    var row = table.rows[ snakeHead.y ];
+                    var cell = row.cells[ snakeHead.x ];
+                    cell.classList.remove("snake-head");
+                     
+                    var i = 1;
+                    while (i<snake.length){
+                        var snakeBody = snake[i];
+                        var row = table.rows[ snakeBody.y ];
+                        var cell = row.cells[ snakeBody.x ];
+                        cell.classList.remove("snake-body");
+                        i = i + 1;
+                    }    
+                }
+
+
                 showSnake();
-                
+               var delta = {
+                   x:1,
+                   y:0,
+               }
+
+               document.addEventListener("keydown", (e) => {
+                    e = e || window.event;
+
+                    if (e.keyCode === 38) { // up
+                        delta = {
+                            x:0,
+                            y:-1
+                        };
+                    }
+
+                    if (e.keyCode === 40) { // down
+                        delta = {
+                            x:0,
+                            y:1
+                        };
+                    }
+
+                    if (e.keyCode === 37) { // left
+                        delta = {
+                         x:-1,
+                         y:0
+                        };
+                    }
+
+                    if (e.keyCode === 39) { // right
+                        delta = {
+                            x:1,
+                            y:0
+                        };
+                    }
+               });
+
+                window.setInterval(() => {
+                    hideSnake();
+                 
+                    var snakeHead = snake[0];
+                    snake[0] = {
+                        x: snakeHead.x + delta.x,
+                        y: snakeHead.y + delta.y    
+                    };
+
+                    showSnake();
+                }, 500)
             });
         </script>
     </head>
-    <body>
+    <body   >
             
         <table id="main"></table>
         
