@@ -37,7 +37,7 @@
             border: solid 1px #015e01;
         }     
         
-        #up, #down, #left, #right {
+        #up, #down, #left, #right, #slower, #faster {
             position: absolute;
             font-size: 25vh;
             text-align: center;
@@ -133,6 +133,18 @@
                     right.style.width = window.innerWidth/4;
                     right.style.height = window.innerHeight/2;
                     right.addEventListener("click", onRight);
+
+                    var slower = document.getElementById("slower");
+                    slower.style.left = window.innerWidth*3/4;
+                    slower.style.top = window.innerHeight*3/4;
+                    slower.style.width = window.innerWidth/8;
+                    slower.style.height = window.innerHeight/4;
+
+                    var faster = document.getElementById("faster");
+                    faster.style.left = window.innerWidth*7/8;
+                    faster.style.top = window.innerHeight*3/4;
+                    faster.style.width = window.innerWidth/8;
+                    faster.style.height = window.innerHeight/4;
 
                     document.body.addEventListener("keydown", (e) => {
                         console.info(1);
@@ -262,6 +274,14 @@
         <div id = "right"> 
             <i class="fa fa-chevron-circle-right"></i>
         </div>
+
+        <dv id = "slower">
+            <i class="fa fa-minus-circle"></i>
+        </dv>
+
+        <dv id = "faster">
+            <i class="fa fa-plus-circle"></i>
+        </dv>
         
     </body>
 
