@@ -14,7 +14,8 @@
         body {
             margin: 0;
         }
-        #main{
+
+        #main {
             border-spacing: 0; 
             border-collapse: separate;
             
@@ -26,25 +27,30 @@
             height: 10px;
         
             border-radius: 5px;
-         
         }
 
-        #main td.snake-head{
+        #main td.snake-head {
             border: solid 1px #02a302;
-             }
+        }
+        
         #main td.snake-body{
             border: solid 1px #015e01;
         }     
+        
         #up, #down, #left, #right {
             position: absolute;
             font-size: 25vh;
             text-align: center;
-            opacity: 0.05;
-        }
-        #up.clicked, #down.clicked, #left.clicked, #right.clicked {
-            opacity: 0.2;
+            opacity: 0.1;
         }
         
+        #up.clicked, #down.clicked, #left.clicked, #right.clicked {
+            opacity: 0.3;
+        }
+
+        #left i, #right i {
+            transform: translateY(50%);
+        }
         
        </style>
 
@@ -90,9 +96,6 @@
                 right.style.top = window.innerHeight/4 ;
                 right.style.width = window.innerWidth/4;
                 right.style.height = window.innerHeight/2; 
- 
-
-
                 
                 var snake = [];
                 snake.push({
@@ -107,6 +110,7 @@
                     x: 8,
                     y: 10
                 });*/
+ 
                 function showSnake(){
                     var snakeHead = snake[0];
                     var table = document.getElementById("main");
@@ -123,6 +127,7 @@
                         i = i + 1;
                     }    
                 }
+ 
                 function hideSnake(){
                     var snakeHead = snake[0];
                     var table = document.getElementById("main");
@@ -139,25 +144,27 @@
                         i = i + 1;
                     }    
                 }
-
-
+                
                 showSnake();
-               var delta = {
-                   x:1,
-                   y:0,
-               }
-                 function clicked (id){
-                     document.getElementById(id).classList.add("clicked");
-                     window.setTimeout(() => document.getElementById(id).classList.remove("clicked"), 50);
-                 }
+                
+                var delta = {
+                    x:1,
+                    y:0,
+                }
 
-               document.getElementById("up").addEventListener("click", () => {
+                function clicked (id){
+                    document.getElementById(id).classList.add("clicked");
+                    window.setTimeout(() => document.getElementById(id).classList.remove("clicked"), 50);
+                }
+
+                document.getElementById("up").addEventListener("click", () => {
                     delta = {
                         x:0,
                         y:-1
                     };
                     clicked("up");
                });
+
                document.getElementById("down").addEventListener("click", () => {
                     delta = {
                         x:0,
@@ -165,6 +172,7 @@
                     };
                     clicked("down");
                });
+
                document.getElementById("left").addEventListener("click", () => {
                     delta = {
                         x:-1,
@@ -172,42 +180,14 @@
                     };
                     clicked("left");
                });
+
                document.getElementById("right").addEventListener("click", () => {
                     delta = {
                         x:1,
                         y:0
                     };
                     clicked("right");
-               });
-/*
-                    if (e.keyCode === 38) { // up
-                        delta = {
-                            x:0,
-                            y:-1
-                        };
-                    }
-
-                    if (e.keyCode === 40) { // down
-                        delta = {
-                            x:0,
-                            y:1
-                        };
-                    }
-
-                    if (e.keyCode === 37) { // left
-                        delta = {
-                         x:-1,
-                         y:0
-                        };
-                    }
-
-                    if (e.keyCode === 39) { // right
-                        delta = {
-                            x:1,
-                            y:0
-                        };
-                    }
-                    */
+                });
 
                 window.setInterval(() => {
                     hideSnake();
@@ -233,7 +213,6 @@
                     if(snake[0].y >= table.rows.length){
                         snake[0].y = 0;
                     }
-                    
                     
                     showSnake();
                 }, 500)
