@@ -31,10 +31,12 @@
 
         #main td.snake-head {
             background-color: #02a302;
+            border: solid 1px #02a302;
         }
         
         #main td.snake-body{
             border: solid 1px #015e01;
+            background-color: #015e01;
         }     
         
         #up, #down, #left, #right, #slower, #faster {
@@ -219,26 +221,29 @@
                     hideSnake();
                  
                     var snakeHead = snake[0];
-                    snake[0] = {
+                    var newSnakeHead = {
                         x: snakeHead.x + delta.x,
                         y: snakeHead.y + delta.y    
                     };
 
-                    if(snake[0].x < 0){
-                        snake[0].x = table.rows[0].cells.length-1;
+                    if(newSnakeHead.x < 0){
+                        newSnakeHead.x = table.rows[0].cells.length-1;
                     }
 
-                    if(snake[0].y < 0){
-                        snake[0].y = table.rows.length-1;
+                    if(newSnakeHead.y < 0){
+                        newSnakeHead.y = table.rows.length-1;
                     }
 
-                    if(snake[0].x >= table.rows[0].cells.length){
-                        snake[0].x = 0;
+                    if(newSnakeHead.x >= table.rows[0].cells.length){
+                        newSnakeHead.x = 0;
                     }
                     
-                    if(snake[0].y >= table.rows.length){
-                        snake[0].y = 0;
+                    if(newSnakeHead.y >= table.rows.length){
+                        newSnakeHead.y = 0;
                     }
+
+                    snake.unshift(newSnakeHead);
+                    snake.pop();
                     
                     showSnake();
 
@@ -252,14 +257,14 @@
                     x: 10, 
                     y: 10
                 });
-                /*snake.push({
+                snake.push({
                     x: 9,
                     y: 10
                 });
                 snake.push({
                     x: 8,
                     y: 10
-                });*/
+                });
 
                 var delta = {
                     x:1,
