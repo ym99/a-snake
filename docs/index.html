@@ -218,6 +218,23 @@
                         y: snakeHead.y + delta.y    
                     };
 
+                    if(snake[0].x < 0){
+                        snake[0].x = table.rows[0].cells.length-1;
+                    }
+
+                    if(snake[0].y < 0){
+                        snake[0].y = table.rows.length-1;
+                    }
+
+                    if(snake[0].x >= table.rows[0].cells.length){
+                        snake[0].x = 0;
+                    }
+                    
+                    if(snake[0].y >= table.rows.length){
+                        snake[0].y = 0;
+                    }
+                    
+                    
                     showSnake();
                 }, 500)
             });
