@@ -39,6 +39,11 @@
             background-color: #015e01;
         }     
         
+        #main td.apple{
+            border: solid 1px red;
+            background-color: red;
+        }
+
         #up, #down, #left, #right, #slower, #faster {
             position: absolute;
             font-size: 25vh;
@@ -73,6 +78,13 @@
                         }
                         r = r + 1;  
                     }
+                }
+
+                function createApple(){
+                    return {
+                        x: Math.floor(Math.random() * table.rows[0].cells.length),
+                        y: Math.floor(Math.random() * table.rows.length)
+                    };
                 }
 
                 function clicked (id){
@@ -185,7 +197,6 @@
 
                 function showSnake(){
                     var snakeHead = snake[0];
-                    var table = document.getElementById("main");
                     var row = table.rows[ snakeHead.y ];
                     var cell = row.cells[ snakeHead.x ];
                     cell.classList.add("snake-head");
@@ -202,7 +213,6 @@
  
                 function hideSnake(){
                     var snakeHead = snake[0];
-                    var table = document.getElementById("main");
                     var row = table.rows[ snakeHead.y ];
                     var cell = row.cells[ snakeHead.x ];
                     cell.classList.remove("snake-head");
@@ -271,10 +281,24 @@
                     y:0,
                 };
 
-                var delay = 500;
-
                 fillTable();
                 createButtons(); 
+
+                var apples = [];
+                var index = 0;
+                while (index<5){
+                    var apple = createApple();
+                    apples.push(apple);
+
+                    var row = table.rows[apple.y];
+                    var cell = row.cells[apple.x];
+                    cell.classList.add("apple");
+
+                    index = index + 1;
+                } 
+
+                var delay = 500;
+
                 showSnake();
                 
                 window.setTimeout(onTimer, delay);
