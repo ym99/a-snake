@@ -30,7 +30,7 @@
         }
 
         #main td.snake-head {
-            border: solid 1px #02a302;
+            background-color: #02a302;
         }
         
         #main td.snake-body{
@@ -44,7 +44,7 @@
             opacity: 0.1;
         }
         
-        #up.clicked, #down.clicked, #left.clicked, #right.clicked {
+        #up.clicked, #down.clicked, #left.clicked, #right.clicked, #slower.clicked, #faster.clicked {
             opacity: 0.3;
         }
 
@@ -73,6 +73,11 @@
                     }
                 }
 
+                function clicked (id){
+                    document.getElementById(id).classList.add("clicked");
+                    window.setTimeout(() => document.getElementById(id).classList.remove("clicked"), 50);
+                }
+                
                 function onUp() {
                     delta = {
                         x: 0,
@@ -103,6 +108,16 @@
                         y:0
                     };
                     clicked("right");
+                }
+
+                function onSlower(){
+                    delay = delay * 2;
+                    clicked("slower");
+                }
+
+                function onFaster(){
+                    delay = delay / 2;
+                    clicked("faster");
                 }
             
                 function createButtons() {
@@ -139,12 +154,14 @@
                     slower.style.top = window.innerHeight*3/4;
                     slower.style.width = window.innerWidth/8;
                     slower.style.height = window.innerHeight/4;
+                    slower.addEventListener("click", onSlower);
 
                     var faster = document.getElementById("faster");
                     faster.style.left = window.innerWidth*7/8;
                     faster.style.top = window.innerHeight*3/4;
                     faster.style.width = window.innerWidth/8;
                     faster.style.height = window.innerHeight/4;
+                    faster.addEventListener("click", onFaster);
 
                     document.body.addEventListener("keydown", (e) => {
                         console.info(1);
@@ -198,38 +215,7 @@
                     }    
                 }
 
-                function clicked (id){
-                    document.getElementById(id).classList.add("clicked");
-                    window.setTimeout(() => document.getElementById(id).classList.remove("clicked"), 50);
-                }
-                
-                var table = document.getElementById("main");
-
-                var snake = [];
-                snake.push({
-                    x: 10, 
-                    y: 10
-                });
-                /*snake.push({
-                    x: 9,
-                    y: 10
-                });
-                snake.push({
-                    x: 8,
-                    y: 10
-                });*/
-
-                var delta = {
-                    x:1,
-                    y:0,
-                }
-
-                fillTable();
-                createButtons(); 
-                showSnake();
-                
-
-                window.setInterval(() => {
+                function onTimer(){
                     hideSnake();
                  
                     var snakeHead = snake[0];
@@ -255,7 +241,38 @@
                     }
                     
                     showSnake();
-                }, 500)
+
+                    window.setTimeout(onTimer, delay);
+                }
+
+                var table = document.getElementById("main");
+
+                var snake = [];
+                snake.push({
+                    x: 10, 
+                    y: 10
+                });
+                /*snake.push({
+                    x: 9,
+                    y: 10
+                });
+                snake.push({
+                    x: 8,
+                    y: 10
+                });*/
+
+                var delta = {
+                    x:1,
+                    y:0,
+                };
+
+                var delay = 500;
+
+                fillTable();
+                createButtons(); 
+                showSnake();
+                
+                window.setTimeout(onTimer, delay);
             });
         </script>
     </head>
