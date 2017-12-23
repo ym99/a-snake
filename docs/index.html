@@ -8,6 +8,8 @@
         <meta http-equiv="pragma" content="no-cache" />
         <meta name="viewport" content="width=350">
 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <style>
         body {
             margin: 0;
@@ -19,7 +21,7 @@
         }
 
         #main td{
-            border: solid 1px #dddddd;
+            border: solid 1px #ffffff;
             width: 10px;
             height: 10px;
         
@@ -35,10 +37,11 @@
         }     
         #up, #down, #left, #right {
             position: absolute;
-            border: solid 1px red;
+            font-size: 25vh;
+            text-align: center;
+            opacity: 0.05;
         }
-
-        </style>
+       </style>
 
         <script>
             document.addEventListener("DOMContentLoaded", function(event) {
@@ -210,10 +213,18 @@
     <body>
             
         <table id="main"></table>
-        <div id = "up"></div>
-        <div id = "down"></div> 
-        <div id = "left"></div>
-        <div id = "right"></div>
+        <div id = "up">
+            <i class="fa fa-arrow-up"></i>
+        </div>
+        <div id = "down"> 
+            <i class="fa fa-arrow-down"></i>
+        </div> 
+        <div id = "left"> 
+            <i class="fa fa-arrow-left"></i>
+        </div>
+        <div id = "right"> 
+            <i class="fa fa-arrow-right"></i>
+        </div>
         
     </body>
 
