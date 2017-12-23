@@ -41,6 +41,11 @@
             text-align: center;
             opacity: 0.05;
         }
+        #up.clicked, #down.clicked, #left.clicked, #right.clicked {
+            opacity: 0.2;
+        }
+        
+        
        </style>
 
         <script>
@@ -141,30 +146,38 @@
                    x:1,
                    y:0,
                }
+                 function clicked (id){
+                     document.getElementById(id).classList.add("clicked");
+                     window.setTimeout(() => document.getElementById(id).classList.remove("clicked"), 50);
+                 }
 
                document.getElementById("up").addEventListener("click", () => {
                     delta = {
                         x:0,
                         y:-1
                     };
+                    clicked("up");
                });
                document.getElementById("down").addEventListener("click", () => {
                     delta = {
                         x:0,
                         y:1
                     };
+                    clicked("down");
                });
                document.getElementById("left").addEventListener("click", () => {
                     delta = {
                         x:-1,
                         y:0
                     };
+                    clicked("left");
                });
                document.getElementById("right").addEventListener("click", () => {
                     delta = {
                         x:1,
                         y:0
                     };
+                    clicked("right");
                });
 /*
                     if (e.keyCode === 38) { // up
