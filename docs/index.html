@@ -55,62 +55,79 @@
        </style>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function(event) {
-                var table = document.getElementById("main");
-
-                var maxCells = Math.floor((window.innerWidth - 2) / 10);
-                var maxRows = Math.floor((window.innerHeight - 2) / 10);
+            document.addEventListener("DOMContentLoaded", (event) => {
+                function fillTable(){
+                    var maxCells = Math.floor((window.innerWidth - 2) / 10);
+                    var maxRows = Math.floor((window.innerHeight - 2) / 10);
                 
-                var r = 0;
-                while(r < maxRows) {
-                    var row = table.insertRow(table.rows.length-1);
-                    var c = 0;
-                    while (c < maxCells){
-                        var cell = row.insertCell(row.cells.length-1);
+                    var r = 0;
+                    while(r < maxRows) {
+                        var row = table.insertRow(table.rows.length-1);
+                        var c = 0;
+                        while (c < maxCells){
+                            var cell = row.insertCell(row.cells.length-1);
                         
-                        c = c + 1;
+                            c = c + 1;
+                        }
+                        r = r + 1;  
                     }
-                    r = r + 1;  
                 }
 
-                var up = document.getElementById("up");
-                up.style.left = window.innerWidth/4;
-                up.style.top = 0;
-                up.style.width = window.innerWidth/2;
-                up.style.height = window.innerHeight/4; 
+                function createButtons() {
+                    var up = document.getElementById("up");
+                    up.style.left = window.innerWidth/4;
+                    up.style.top = 0;
+                    up.style.width = window.innerWidth/2;
+                    up.style.height = window.innerHeight/4; 
+                    up.addEventListener("click", () => {
+                        delta = {
+                            x:0,
+                            y:-1
+                        };
+                        clicked("up");
+                    });
 
-                var down = document.getElementById("down");
-                down.style.left = window.innerWidth/4;
-                down.style.top = window.innerHeight*3/4 ;
-                down.style.width = window.innerWidth/2;
-                down.style.height = window.innerHeight/4;
-                
-                var left = document.getElementById("left");
-                left.style.left = 0;
-                left.style.top = window.innerHeight/4 ;
-                left.style.width = window.innerWidth/4;
-                left.style.height = window.innerHeight/2;
+                    var down = document.getElementById("down");
+                    down.style.left = window.innerWidth/4;
+                    down.style.top = window.innerHeight*3/4 ;
+                    down.style.width = window.innerWidth/2;
+                    down.style.height = window.innerHeight/4;
+                    down.addEventListener("click", () => {
+                        delta = {
+                            x:0,
+                            y:1
+                        };
+                        clicked("down");
+                    });
 
-                var right = document.getElementById("right");
-                right.style.left = window.innerWidth*3/4;
-                right.style.top = window.innerHeight/4 ;
-                right.style.width = window.innerWidth/4;
-                right.style.height = window.innerHeight/2; 
-                
-                var snake = [];
-                snake.push({
-                    x: 10, 
-                    y: 10
-                });
-                /*snake.push({
-                    x: 9,
-                    y: 10
-                });
-                snake.push({
-                    x: 8,
-                    y: 10
-                });*/
- 
+                    
+                    var left = document.getElementById("left");
+                    left.style.left = 0;
+                    left.style.top = window.innerHeight/4 ;
+                    left.style.width = window.innerWidth/4;
+                    left.style.height = window.innerHeight/2;
+                    left.addEventListener("click", () => {
+                        delta = {
+                            x:-1,
+                            y:0
+                        };
+                        clicked("left");
+                    });
+
+                    var right = document.getElementById("right");
+                    right.style.left = window.innerWidth*3/4;
+                    right.style.top = window.innerHeight/4 ;
+                    right.style.width = window.innerWidth/4;
+                    right.style.height = window.innerHeight/2;
+                    right.addEventListener("click", () => {
+                        delta = {
+                            x:1,
+                            y:0
+                        };
+                        clicked("right");
+                    }); 
+                }
+
                 function showSnake(){
                     var snakeHead = snake[0];
                     var table = document.getElementById("main");
@@ -144,50 +161,37 @@
                         i = i + 1;
                     }    
                 }
-                
-                showSnake();
-                
-                var delta = {
-                    x:1,
-                    y:0,
-                }
 
                 function clicked (id){
                     document.getElementById(id).classList.add("clicked");
                     window.setTimeout(() => document.getElementById(id).classList.remove("clicked"), 50);
                 }
+                
+                var table = document.getElementById("main");
 
-                document.getElementById("up").addEventListener("click", () => {
-                    delta = {
-                        x:0,
-                        y:-1
-                    };
-                    clicked("up");
-               });
-
-               document.getElementById("down").addEventListener("click", () => {
-                    delta = {
-                        x:0,
-                        y:1
-                    };
-                    clicked("down");
-               });
-
-               document.getElementById("left").addEventListener("click", () => {
-                    delta = {
-                        x:-1,
-                        y:0
-                    };
-                    clicked("left");
-               });
-
-               document.getElementById("right").addEventListener("click", () => {
-                    delta = {
-                        x:1,
-                        y:0
-                    };
-                    clicked("right");
+                var snake = [];
+                snake.push({
+                    x: 10, 
+                    y: 10
                 });
+                /*snake.push({
+                    x: 9,
+                    y: 10
+                });
+                snake.push({
+                    x: 8,
+                    y: 10
+                });*/
+
+                var delta = {
+                    x:1,
+                    y:0,
+                }
+
+                fillTable();
+                createButtons(); 
+                showSnake();
+                
 
                 window.setInterval(() => {
                     hideSnake();
