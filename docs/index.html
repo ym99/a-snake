@@ -26,31 +26,32 @@
         #main {
             border-spacing: 0; 
             border-collapse: separate;
-            
+            text-align: center;
+            font-size: 30px;
+            padding: 0px;
+            margin: 0px;
         }
 
         #main td {
             border: solid 1px rgba(0, 0, 0, 0);
-            width: 20px;
-            height: 20px;
-        
-            border-radius: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
         }
 
         #main td.snake-head {
-            background-color: #646601;
-            border: solid 1px #646601;
+            border: solid 1px rgba(0, 0, 0, 0);
+            color: #646601;
         }
         
         #main td.snake-body {
-            border: solid 1px #015e01;
-            background-color: #015e01;
+            border: solid 1px rgba(0, 0, 0, 0);
+            color: #646601;
         }     
         
         #main td.apple {
-            border: solid 1px #00d600;
-            background-color: #00d600;
-            content: "x";
+            border: solid 1px rgba(0, 0, 0, 0);
+            color: #00d600;
         }
 
         #up, #down, #left, #right {
@@ -80,8 +81,8 @@
         <script>
             document.addEventListener("DOMContentLoaded", (event) => {
                 function fillTable(){
-                    var maxCells = Math.floor(window.innerWidth / 20);
-                    var maxRows = Math.floor(window.innerHeight / 20);
+                    var maxCells = Math.floor(window.innerWidth / 30);
+                    var maxRows = Math.floor(window.innerHeight / 30);
                 
                     var r = 0;
                     while(r < maxRows) {
@@ -222,8 +223,10 @@
                     var cell = row.cells[ snakeHead.x ];
                     if (show) {
                         cell.classList.add("snake-head");
+                        cell.innerHTML = "<i class='fa fa-pause-circle'></i>";
                     } else {
                         cell.classList.remove("snake-head");
+                        cell.innerHTML = "";
                     }
                      
                     var i = 1;
@@ -233,8 +236,10 @@
                         var cell = row.cells[ snakeBody.x ];
                         if (show) {
                             cell.classList.add("snake-body");
+                            cell.innerHTML = "<i class='fa fa-circle'></i>";
                         } else {
                             cell.classList.remove("snake-body");
+                            cell.innerHTML = "";
                         }
                         i = i + 1;
                     }    
@@ -247,8 +252,10 @@
 
                         if (show) {
                             cell.classList.add("apple");
+                            cell.innerHTML = "<i class='fa fa-apple'></i>";
                         } else {
                             cell.classList.remove("apple");
+                            cell.innerHTML = "";
                         }
                         i = i + 1;
                     }
