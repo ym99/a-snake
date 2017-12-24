@@ -52,9 +52,16 @@
             background-color: #00d600;
         }
 
-        #up, #down, #left, #right, #slower, #faster {
+        #up, #down, #left, #right {
             position: absolute;
             font-size: 25vh;
+            text-align: center;
+            opacity: 0.1;
+        }
+
+        #slower, #faster {
+            position: absolute;
+            font-size: 10vh;
             text-align: center;
             opacity: 0.1;
         }
@@ -63,7 +70,7 @@
             opacity: 0.3;
         }
 
-        #left i, #right i {
+        #left i, #right i, #slower i, #faster i {
             transform: translateY(50%);
         }
         
@@ -198,6 +205,12 @@
                         }
                         if (e.keyCode === 40) {
                             onDown();
+                        }
+                        if (e.keyCode === 107 || e.keyCode === 187) {
+                            onFaster();
+                        }
+                        if (e.keyCode === 109 || e.keyCode === 189) {
+                            onSlower();
                         }
                     });
                 }
