@@ -19,6 +19,10 @@
             background-color: #09ff00;
         }
 
+        .eating-self {
+            background-color: red;
+        }
+
         #main {
             border-spacing: 0; 
             border-collapse: separate;
@@ -253,14 +257,28 @@
                     if(newSnakeHead.y >= table.rows.length){
                         newSnakeHead.y = 0;
                     }
-
-                    var appleFound = false;
+                    
+                    var keepSnakeTail = false;
                     var index = 0;
+                    while (index<snake.length){
+                        var snakeBody = snake[index];
+                        if (snakeBody.x === newSnakeHead.x && snakeBody.y === newSnakeHead.y) {
+                            snake.splice(index);
+                            keepSnakeTail = true;
+                            document.body.classList.add("eating-self");
+                            window.setInterval(() => document.body.classList.remove("eating-self"), 100);
+                        }
+                        index = index + 1;
+                    }
+
+                    var addNewApple = false;
+                    index = 0;
                     while (index<apples.length){
                         var apple = apples[index];
                         if (newSnakeHead.x === apple.x &&
                             newSnakeHead.y === apple.y) {
-                                appleFound = true;
+                                keepSnakeTail = true;
+                                addNewApple = true;
                                 apples.splice(index, 1);
                                 
                                 document.body.classList.add("eating-apple");
@@ -271,13 +289,13 @@
                     }
 
                     snake.unshift(newSnakeHead);
-                    if (appleFound === false){
+                    if (keepSnakeTail === false){
                         snake.pop();
                     }
                     
                     showSnake();
 
-                    if (appleFound) {
+                    if (addNewApple) {
                         var positionTaken = false;
                         do 
                         {
@@ -309,7 +327,6 @@
                         cell.classList.add("apple");
                     }
 
-                    console.info(apples);
                     window.setTimeout(onTimer, delay);
                 }
 
