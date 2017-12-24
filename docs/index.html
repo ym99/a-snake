@@ -216,40 +216,46 @@
                     });
                 }
 
-                function showSnake(){
+                function show(show){
                     var snakeHead = snake[0];
                     var row = table.rows[ snakeHead.y ];
                     var cell = row.cells[ snakeHead.x ];
-                    cell.classList.add("snake-head");
+                    if (show) {
+                        cell.classList.add("snake-head");
+                    } else {
+                        cell.classList.remove("snake-head");
+                    }
                      
                     var i = 1;
-                    while (i<snake.length){
+                    while (i < snake.length){
                         var snakeBody = snake[i];
                         var row = table.rows[ snakeBody.y ];
                         var cell = row.cells[ snakeBody.x ];
-                        cell.classList.add("snake-body");
+                        if (show) {
+                            cell.classList.add("snake-body");
+                        } else {
+                            cell.classList.remove("snake-body");
+                        }
                         i = i + 1;
                     }    
+
+                    i = 0;
+                    while (i < apples.length) {
+                        var apple = apples[i];
+                        var row = table.rows[apple.y];
+                        var cell = row.cells[apple.x];
+
+                        if (show) {
+                            cell.classList.add("apple");
+                        } else {
+                            cell.classList.remove("apple");
+                        }
+                        i = i + 1;
+                    }
                 }
  
-                function hideSnake(){
-                    var snakeHead = snake[0];
-                    var row = table.rows[ snakeHead.y ];
-                    var cell = row.cells[ snakeHead.x ];
-                    cell.classList.remove("snake-head", "apple");
-                     
-                    var i = 1;
-                    while (i<snake.length){
-                        var snakeBody = snake[i];
-                        var row = table.rows[ snakeBody.y ];
-                        var cell = row.cells[ snakeBody.x ];
-                        cell.classList.remove("snake-body", "apple");
-                        i = i + 1;
-                    }    
-                }
-
                 function onTimer(){
-                    hideSnake();
+                    show(false);
                  
                     var newSnakeHead = {
                         x: snake[0].x + delta.x,
@@ -307,8 +313,6 @@
                         snake.pop();
                     }
                     
-                    showSnake();
-
                     if (addNewApple) {
                         var positionTaken = false;
                         do 
@@ -336,10 +340,9 @@
                         while (positionTaken);
 
                         apples.push(apple);
-                        var row = table.rows[apple.y];
-                        var cell = row.cells[apple.x];
-                        cell.classList.add("apple");
                     }
+
+                    show(true);
 
                     window.setTimeout(onTimer, delay);
                 }
@@ -373,16 +376,13 @@
                 while (index<5){
                     var apple = createApple();
                     apples.push(apple);
-                    var row = table.rows[apple.y];
-                    var cell = row.cells[apple.x];
-                    cell.classList.add("apple");
 
                     index = index + 1;
                 } 
 
                 var delay = 250;
 
-                showSnake();
+                show(true);
                 
                 window.setTimeout(onTimer, delay);
             });
