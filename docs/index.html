@@ -89,7 +89,7 @@
                         var c = 0;
                         while (c < maxCells){
                             var cell = row.insertCell(row.cells.length-1);
-                        
+                            cell.innerHTML = "<div></div>";
                             c = c + 1;
                         }
                         r = r + 1;  
@@ -280,7 +280,7 @@
                             snake.splice(index);
                             keepSnakeTail = true;
                             document.body.classList.add("eating-self");
-                            window.setInterval(() => document.body.classList.remove("eating-self"), 100);
+                            window.setInterval(() => document.body.classList.remove("eating-self"), 200);
                         }
                         index = index + 1;
                     }
@@ -296,7 +296,7 @@
                                 apples.splice(index, 1);
                                 
                                 document.body.classList.add("eating-apple");
-                                window.setInterval(() => document.body.classList.remove("eating-apple"), 100);
+                                window.setInterval(() => document.body.classList.remove("eating-apple"), 200);
                         }
 
                         index = index + 1;
