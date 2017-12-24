@@ -263,6 +263,13 @@
                             newSnakeHead.y === apple.y) {
                                 appleFound = true;
                                 apples.splice(index);
+                                
+                                var apple = createApple();
+                                apples.push(apple);
+                                var row = table.rows[apple.y];
+                                var cell = row.cells[apple.x];
+                                cell.classList.add("apple");
+
                                 document.body.classList.add("eating-apple");
                                 window.setInterval(() => document.body.classList.remove("eating-apple"), 100);
                         }
@@ -309,7 +316,6 @@
                 while (index<5){
                     var apple = createApple();
                     apples.push(apple);
-
                     var row = table.rows[apple.y];
                     var cell = row.cells[apple.x];
                     cell.classList.add("apple");
