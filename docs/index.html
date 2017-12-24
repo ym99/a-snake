@@ -182,7 +182,6 @@
                     faster.addEventListener("click", onFaster);
 
                     document.body.addEventListener("keydown", (e) => {
-                        console.info(1);
                         e = e || window.event;
                         if (e.keyCode === 37) {
                             onLeft();
@@ -262,14 +261,8 @@
                         if (newSnakeHead.x === apple.x &&
                             newSnakeHead.y === apple.y) {
                                 appleFound = true;
-                                apples.splice(index);
+                                apples.splice(index, 1);
                                 
-                                var apple = createApple();
-                                apples.push(apple);
-                                var row = table.rows[apple.y];
-                                var cell = row.cells[apple.x];
-                                cell.classList.add("apple");
-
                                 document.body.classList.add("eating-apple");
                                 window.setInterval(() => document.body.classList.remove("eating-apple"), 100);
                         }
@@ -284,6 +277,39 @@
                     
                     showSnake();
 
+                    if (appleFound) {
+                        var positionTaken = false;
+                        do 
+                        {
+                            var apple = createApple();
+
+                            var index = 0;
+                            while (index<snake.length){
+                                var snakeBody = snake[index];
+                                if (snakeBody.x === apple.x && snakeBody.y === apple.y) {
+                                    positionTaken = true;
+                                }
+                                index = index + 1;
+                            }
+
+                            index = 0;
+                            while (index<apples.length){
+                                var oldApple = apples[index];
+                                if (oldApple.x === apple.x && oldApple.y === apple.y) {
+                                    positionTaken = true;
+                                }
+                                index = index + 1;
+                            }
+                        }
+                        while (positionTaken);
+
+                        apples.push(apple);
+                        var row = table.rows[apple.y];
+                        var cell = row.cells[apple.x];
+                        cell.classList.add("apple");
+                    }
+
+                    console.info(apples);
                     window.setTimeout(onTimer, delay);
                 }
 
@@ -323,7 +349,7 @@
                     index = index + 1;
                 } 
 
-                var delay = 500;
+                var delay = 250;
 
                 showSnake();
                 
