@@ -20,12 +20,12 @@
             margin: 0;
         }
 
-        body.eating-apple {
-            background-color: #09ff00;
+        body.eating-good {
+            background-color: #00d600;
         }
 
-        body.eating-self {
-            background-color: red;
+        body.eating-bad {
+            background-color: #8a008f;
         }
 
         #main {
@@ -55,6 +55,10 @@
         
         #main td.apple {
             color: #00d600;
+        }
+
+        #main td.monster {
+            color: #8a008f;
         }
 
         #score {
@@ -114,23 +118,20 @@
                     return table;
                 }
 
-                function createRandomXY(){
-                    return {
-                        x: Math.floor(Math.random() * table.rows[0].cells.length),
-                        y: Math.floor(Math.random() * table.rows.length)
-                    };
-                }
-
-                function createApple() {
+                function createRandomXY(icons) {
                     var positionTaken = false;
                     do 
                     {
-                        var apple = createRandomXY();
+                        var randomXY = {
+                            x: Math.floor(Math.random() * table.rows[0].cells.length),
+                            y: Math.floor(Math.random() * table.rows.length),
+                            icon: icons[Math.floor(Math.random() * icons.length)],
+                        };
 
                         var index = 0;
                         while (index<snake.length){
                             var snakeBody = snake[index];
-                            if (snakeBody.x === apple.x && snakeBody.y === apple.y) {
+                            if (snakeBody.x === randomXY.x && snakeBody.y === randomXY.y) {
                                 positionTaken = true;
                             }
                             index = index + 1;
@@ -138,8 +139,17 @@
 
                         index = 0;
                         while (index<apples.length){
-                            var oldApple = apples[index];
-                            if (oldApple.x === apple.x && oldApple.y === apple.y) {
+                            var apple = apples[index];
+                            if (apple.x === randomXY.x && apple.y === randomXY.y) {
+                                positionTaken = true;
+                            }
+                            index = index + 1;
+                        }
+
+                        index = 0;
+                        while (index<monsters.length){
+                            var monster = monsters[index];
+                            if (monster.x === randomXY.x && monster.y === randomXY.y) {
                                 positionTaken = true;
                             }
                             index = index + 1;
@@ -147,7 +157,7 @@
                     }
                     while (positionTaken);
 
-                    return apple;
+                    return randomXY;
                 }
 
                 function clicked (id){
@@ -307,9 +317,22 @@
                         var cell = table.rows[apples[i].y].cells[apples[i].x];
                         if (show) {
                             cell.classList.add("apple");
-                            cell.innerHTML = "<i class='fa fa-apple'></i>";
+                            cell.innerHTML = apples[i].icon;
                         } else {
                             cell.classList.remove("apple");
+                            cell.innerHTML = "";
+                        }
+                        i = i + 1;
+                    }
+
+                    i = 0;
+                    while (i < monsters.length) {
+                        var cell = table.rows[monsters[i].y].cells[monsters[i].x];
+                        if (show) {
+                            cell.classList.add("monster");
+                            cell.innerHTML = monsters[i].icon;
+                        } else {
+                            cell.classList.remove("monster");
                             cell.innerHTML = "";
                         }
                         i = i + 1;
@@ -341,19 +364,42 @@
                     }
                     
                     var keepSnakeTail = false;
+                    var addNewApple = false;
+                    var addNewMonster = false;
                     var index = 0;
+
+                    // stepping on self                    
+                    index = 0;
                     while (index<snake.length){
                         var snakeBody = snake[index];
                         if (snakeBody.x === newSnakeHead.x && snakeBody.y === newSnakeHead.y) {
                             snake.splice(index);
                             keepSnakeTail = true;
-                            document.body.classList.add("eating-self");
-                            window.setInterval(() => document.body.classList.remove("eating-self"), 200);
+                            document.body.classList.add("eating-bad");
+                            window.setInterval(() => document.body.classList.remove("eating-bad"), 200);
                         }
                         index = index + 1;
                     }
 
-                    var addNewApple = false;
+                    // stepping on monster
+                    index = 0;
+                    while (index<monsters.length){
+                        var monster = monsters[index];
+                        if (newSnakeHead.x === monster.x &&
+                            newSnakeHead.y === monster.y) {
+                                snake.splice(0);
+                                keepSnakeTail = true;
+                                addNewMonster = true;
+                                monsters.splice(index, 1);
+                                
+                                document.body.classList.add("eating-bad");
+                                window.setInterval(() => document.body.classList.remove("eating-bad"), 200);
+                        }
+
+                        index = index + 1;
+                    }
+
+                    // stepping on apple
                     index = 0;
                     while (index<apples.length){
                         var apple = apples[index];
@@ -363,20 +409,25 @@
                                 addNewApple = true;
                                 apples.splice(index, 1);
                                 
-                                document.body.classList.add("eating-apple");
-                                window.setInterval(() => document.body.classList.remove("eating-apple"), 200);
+                                document.body.classList.add("eating-good");
+                                window.setInterval(() => document.body.classList.remove("eating-good"), 200);
                         }
 
                         index = index + 1;
                     }
 
+                    // process
                     snake.unshift(newSnakeHead);
                     if (keepSnakeTail === false){
                         snake.pop();
                     }
                     
                     if (addNewApple) {
-                        apples.push(createApple());
+                        apples.push(createRandomXY(appleIcons));
+                    }
+
+                    if (addNewMonster) {
+                        monsters.push(createRandomXY(monsterIcons));
                     }
 
                     show(true);
@@ -387,18 +438,41 @@
                 var table = createTable();
                 createButtons(); 
 
-                var snake = [createRandomXY()];
+                var snake = [];
+                var apples = [];
+                var monsters = [];
+
+                var appleIcons = [
+                    "<i class='fa fa-apple'></i>", 
+                ];
+
+                var monsterIcons = [
+                    "<i class='fa fa-android'></i>", 
+                    "<i class='fa fa-truck'></i>", 
+                    "<i class='fa fa-tree'></i>",
+                    "<i class='fa fa-car'></i>",
+                    "<i class='fa fa-bug'></i>",
+                    "<i class='fa fa-bus'></i>",
+                ];
+
+                snake.push(createRandomXY(""));
+
+                apples.push(createRandomXY(appleIcons));
+                apples.push(createRandomXY(appleIcons));
+                apples.push(createRandomXY(appleIcons));
+                apples.push(createRandomXY(appleIcons));
+                apples.push(createRandomXY(appleIcons));
+
+                monsters.push(createRandomXY(monsterIcons));
+                monsters.push(createRandomXY(monsterIcons));
+                monsters.push(createRandomXY(monsterIcons));
+                monsters.push(createRandomXY(monsterIcons));
+                monsters.push(createRandomXY(monsterIcons));
+
                 var delta = {
                     x:1,
                     y:0,
                 };
-
-                var apples = [];
-                apples.push(createApple());
-                apples.push(createApple());
-                apples.push(createApple());
-                apples.push(createApple());
-                apples.push(createApple());
 
                 show(true);
                 
@@ -411,7 +485,6 @@
             
         <table id="main"></table>
         <div id="score">
-            1234567890
         </div>
         <div id = "up">
             <i class="fa fa-chevron-circle-up"></i>
