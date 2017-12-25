@@ -11,6 +11,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <style>
+        @font-face {
+            font-family: score-font;
+            src: url(brankovic.ttf);
+        }            
+
         body {
             margin: 0;
         }
@@ -40,16 +45,26 @@
         }
 
         #main td.snake-head {
-            color: #646601;
+            color: #008a00;
         }
         
         #main td.snake-body {
-            color: #646601;
+            color: #008a00;
             font-size: smaller;
         }     
         
         #main td.apple {
             color: #00d600;
+        }
+
+        #score {
+            position: absolute;
+            font-size: 10vh;
+            text-align: right;
+            opacity: 0.8;
+            font-family: score-font;
+            transform: translateY(25%);
+            color: rgb(0, 97, 0);
         }
 
         #up, #down, #left, #right {
@@ -183,6 +198,12 @@
                 }
             
                 function createButtons() {
+                    var score = document.getElementById("score");
+                    score.style.left = 0;
+                    score.style.top = 0;
+                    score.style.width = window.innerWidth * 31 / 32;
+                    score.style.height = window.innerHeight/4; 
+                    
                     var up = document.getElementById("up");
                     up.style.left = window.innerWidth/4;
                     up.style.top = 0;
@@ -249,6 +270,8 @@
                 }
 
                 function show(show){
+                    document.getElementById("score").innerText = snake.length;
+
                     var snakeHead = snake[0];
                     var row = table.rows[ snakeHead.y ];
                     var cell = row.cells[ snakeHead.x ];
@@ -386,6 +409,9 @@
     <body>
             
         <table id="main"></table>
+        <div id="score">
+            1234567890
+        </div>
         <div id = "up">
             <i class="fa fa-chevron-circle-up"></i>
         </div>
@@ -398,15 +424,12 @@
         <div id = "right"> 
             <i class="fa fa-chevron-circle-right"></i>
         </div>
-
         <dv id = "slower">
             <i class="fa fa-minus-circle"></i>
         </dv>
-
         <dv id = "faster">
             <i class="fa fa-plus-circle"></i>
         </dv>
-        
     </body>
 
 </html>
