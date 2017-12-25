@@ -78,7 +78,9 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", (event) => {
-                function fillTable(){
+                function createTable(){
+                    var table = document.getElementById("main");
+
                     var maxCells = Math.floor(window.innerWidth / 30);
                     var maxRows = Math.floor(window.innerHeight / 30);
                 
@@ -93,13 +95,44 @@
                         }
                         r = r + 1;  
                     }
+
+                    return table;
                 }
 
-                function createApple(){
+                function createRandomXY(){
                     return {
                         x: Math.floor(Math.random() * table.rows[0].cells.length),
                         y: Math.floor(Math.random() * table.rows.length)
                     };
+                }
+
+                function createApple() {
+                    var positionTaken = false;
+                    do 
+                    {
+                        var apple = createRandomXY();
+
+                        var index = 0;
+                        while (index<snake.length){
+                            var snakeBody = snake[index];
+                            if (snakeBody.x === apple.x && snakeBody.y === apple.y) {
+                                positionTaken = true;
+                            }
+                            index = index + 1;
+                        }
+
+                        index = 0;
+                        while (index<apples.length){
+                            var oldApple = apples[index];
+                            if (oldApple.x === apple.x && oldApple.y === apple.y) {
+                                positionTaken = true;
+                            }
+                            index = index + 1;
+                        }
+                    }
+                    while (positionTaken);
+
+                    return apple;
                 }
 
                 function clicked (id){
@@ -319,32 +352,7 @@
                     }
                     
                     if (addNewApple) {
-                        var positionTaken = false;
-                        do 
-                        {
-                            var apple = createApple();
-
-                            var index = 0;
-                            while (index<snake.length){
-                                var snakeBody = snake[index];
-                                if (snakeBody.x === apple.x && snakeBody.y === apple.y) {
-                                    positionTaken = true;
-                                }
-                                index = index + 1;
-                            }
-
-                            index = 0;
-                            while (index<apples.length){
-                                var oldApple = apples[index];
-                                if (oldApple.x === apple.x && oldApple.y === apple.y) {
-                                    positionTaken = true;
-                                }
-                                index = index + 1;
-                            }
-                        }
-                        while (positionTaken);
-
-                        apples.push(apple);
+                        apples.push(createApple());
                     }
 
                     show(true);
@@ -352,43 +360,25 @@
                     window.setTimeout(onTimer, delay);
                 }
 
-                var table = document.getElementById("main");
+                var table = createTable();
+                createButtons(); 
 
-                var snake = [];
-                snake.push({
-                    x: 10, 
-                    y: 10
-                });
-                snake.push({
-                    x: 9,
-                    y: 10
-                });
-                snake.push({
-                    x: 8,
-                    y: 10
-                });
-
+                var snake = [createRandomXY()];
                 var delta = {
                     x:1,
                     y:0,
                 };
 
-                fillTable();
-                createButtons(); 
-
                 var apples = [];
-                var index = 0;
-                while (index<5){
-                    var apple = createApple();
-                    apples.push(apple);
-
-                    index = index + 1;
-                } 
-
-                var delay = 250;
+                apples.push(createApple());
+                apples.push(createApple());
+                apples.push(createApple());
+                apples.push(createApple());
+                apples.push(createApple());
 
                 show(true);
                 
+                var delay = 250;
                 window.setTimeout(onTimer, delay);
             });
         </script>
