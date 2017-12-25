@@ -119,9 +119,10 @@
                 }
 
                 function createRandomXY(icons) {
-                    var positionTaken = false;
                     do 
                     {
+                        var positionTaken = false;
+
                         var randomXY = {
                             x: Math.floor(Math.random() * table.rows[0].cells.length),
                             y: Math.floor(Math.random() * table.rows.length),
@@ -457,17 +458,12 @@
 
                 snake.push(createRandomXY(""));
 
-                apples.push(createRandomXY(appleIcons));
-                apples.push(createRandomXY(appleIcons));
-                apples.push(createRandomXY(appleIcons));
-                apples.push(createRandomXY(appleIcons));
-                apples.push(createRandomXY(appleIcons));
+                var count = Math.ceil(table.rows.length * table.rows[0].cells.length / 200);
 
-                monsters.push(createRandomXY(monsterIcons));
-                monsters.push(createRandomXY(monsterIcons));
-                monsters.push(createRandomXY(monsterIcons));
-                monsters.push(createRandomXY(monsterIcons));
-                monsters.push(createRandomXY(monsterIcons));
+                while ((count--) >= 0) {
+                    apples.push(createRandomXY(appleIcons));
+                    monsters.push(createRandomXY(monsterIcons));
+                }
 
                 var delta = {
                     x:1,
