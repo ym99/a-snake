@@ -286,7 +286,15 @@
                         var cell = table.rows[snake[i].y].cells[snake[i].x];
                         if (show) {
                             cell.classList.add("snake-body");
-                            cell.innerHTML = "<i class='fa fa-chevron-down'></i>";
+                            if (snake[i].x - snake[i-1].x < 0) {
+                                cell.innerHTML = "<i class='fa fa-chevron-circle-right'></i>";
+                            } else if (snake[i].x - snake[i-1].x > 0) {
+                                cell.innerHTML = "<i class='fa fa-chevron-circle-left'></i>";
+                            } else if (snake[i].y - snake[i-1].y < 0) {
+                                cell.innerHTML = "<i class='fa fa-chevron-circle-down'></i>";
+                            } else {
+                                cell.innerHTML = "<i class='fa fa-chevron-circle-up'></i>";
+                            }
                         } else {
                             cell.classList.remove("snake-body");
                             cell.innerHTML = "";
@@ -394,7 +402,7 @@
 
                 show(true);
                 
-                var delay = 250;
+                var delay = 200;
                 window.setTimeout(onTimer, delay);
             });
         </script>
