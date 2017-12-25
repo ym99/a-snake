@@ -272,9 +272,7 @@
                 function show(show){
                     document.getElementById("score").innerText = snake.length;
 
-                    var snakeHead = snake[0];
-                    var row = table.rows[ snakeHead.y ];
-                    var cell = row.cells[ snakeHead.x ];
+                    var cell = table.rows[snake[0].y].cells[snake[0].x];
                     if (show) {
                         cell.classList.add("snake-head");
                         cell.innerHTML = "<i class='fa fa-smile-o'></i>";
@@ -285,12 +283,10 @@
                      
                     var i = 1;
                     while (i < snake.length){
-                        var snakeBody = snake[i];
-                        var row = table.rows[ snakeBody.y ];
-                        var cell = row.cells[ snakeBody.x ];
+                        var cell = table.rows[snake[i].y].cells[snake[i].x];
                         if (show) {
                             cell.classList.add("snake-body");
-                            cell.innerHTML = "<i class='fa fa-gear'></i>";
+                            cell.innerHTML = "<i class='fa fa-chevron-down'></i>";
                         } else {
                             cell.classList.remove("snake-body");
                             cell.innerHTML = "";
@@ -300,10 +296,7 @@
 
                     i = 0;
                     while (i < apples.length) {
-                        var apple = apples[i];
-                        var row = table.rows[apple.y];
-                        var cell = row.cells[apple.x];
-
+                        var cell = table.rows[apples[i].y].cells[apples[i].x];
                         if (show) {
                             cell.classList.add("apple");
                             cell.innerHTML = "<i class='fa fa-apple'></i>";
